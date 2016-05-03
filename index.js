@@ -48,18 +48,20 @@ function challenger (password) {
           child.stdin.write(password + '\n');
         } else {
           debug('no password')
-          process.stderr.write(prompt);
+          hasShowPrompt = true;
+          process.stderr.write(''+prompt+'');
           enableStdin(function (input) {
             debug('wrote password from stdin')
             password = input;
             child.stdin.write(input + '\n');
+            process.stderr.write('\n');
           })
         }
       })
 
       detectFailure.on('found', function () {
         debug('failure detected');
-        process.stderr.write('\n' + invalid + '\n');
+        process.stderr.write('' + invalid + '\n');
         password = null;
       })
 
@@ -136,23 +138,40 @@ function detectString (str, d) {
   var buf = '';
   var fn = function (l,e,n){
     var that = this;
-    d && debug('l=%j', l.toString());
-    l.toString().split('\n').forEach(function (k, i) {
-      if (i>0 && buf) {
-        d && debug('buf push=%j', buf);
-        that.push(buf);
-        buf = '';
-      }
-      buf += k;
-      d && debug('buf=%j', buf);
-      if (buf.substr(-str.length)===str) {
+    l = l.toString()
+    d && debug('-------');
+    d && debug('l=%j', l);
+    if(!l.match('\n')) {
+      buf += l;
+      if (buf===str) {
         that.emit('found')
         buf = '';
       }
-    })
+    } else {
+      var k = (buf+l).split('\n');
+      buf = '';
+      d && debug('k=%j', k)
+      var i = k.indexOf(str);
+      if (i>-1) {
+        k.splice(i, 1);
+        that.emit('found')
+      }
+      if (k[k.length-1]!== '')
+        buf = k.pop();
+      that.push(k.join('\n'));
+      d && debug('buf=%j', buf)
+    }
     n();
   }
-  return through2(fn);
+  var fnf = function (d) {
+    if (buf===str) {
+      that.emit('found')
+      buf = '';
+    }
+    if (buf) this.push(buf);
+    d();
+  }
+  return through2(fn, fnf);
 }
 function splitter(){
   var buf = []
