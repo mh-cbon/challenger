@@ -37,8 +37,9 @@ When the new password is correct, save it in memory for later use.
 
 Also cleans up stderr of any sudo challenge output.
 
-To get the complete about of the child_process you may proceed so,
+#### alternate usage
 
+To get the complete about of the child_process you may proceed so,
 
 ```js
 var spawn = require('child_process').spawn;
