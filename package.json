@@ -1,6 +1,6 @@
 {
   "name": "@mh-cbon/challenger",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Challenge sudo over the streams",
   "main": "index.js",
   "scripts": {
@@ -14,7 +14,8 @@
     "public": "npm publish --access=public"
   },
   "keywords": [
-    "sudo", "stream"
+    "sudo",
+    "stream"
   ],
   "author": "mh-cbon <mh-cbon@users.noreply.github.com>",
   "license": "MIT",
