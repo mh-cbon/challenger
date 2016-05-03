@@ -33,7 +33,7 @@ It resolves the sudo challenge given the password provided in `env['SUDOPWD']`.
 
 If the password is incorrect, prompt user for a new password until the challenge is solved, or dies.
 
-When the new password is correct, save it in memmory for later use.
+When the new password is correct, save it in memory for later use.
 
 Also cleans up stderr of any sudo challenge output.
 
